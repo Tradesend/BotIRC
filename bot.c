@@ -1,13 +1,14 @@
 /*
 ** bot.c for bot in /home/moran-_d/rendu/pathwar
-** 
+**
 ** Made by moran-_d
 ** Login   <moran-_d@epitech.net>
-** 
+**
 ** Started on  Mon Apr 27 09:25:45 2015 moran-_d
-** Last update Mon Apr 27 11:33:15 2015 moran-_d
+** Last update Tue Apr 28 14:01:36 2015 Even David
 */
 
+#include <unistd.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +31,8 @@ int main(int argc, char **argv) {
   char ignore[] = "#pathwar-fr :";
   int ignoresize = sizeof(ignore) - 1;
   int joined = 0;
+  char	*str;
+
   debug = 0;
 
   if (!my_connect(server, port, &sockfd))
@@ -46,12 +49,17 @@ int main(int argc, char **argv) {
 
   while(1)
     {
-      n = my_read(sockfd, recvline, debug);      
+      n = my_read(sockfd, recvline, debug);
       if (n > 0)
 	{
 	  recvline[n] = 0;
 	  pos = recvline;
 	  printf("IN: %s <<<\n", pos);
+	  str = malloc(strlen("./script.sh ") + strlen(pos) + 1);
+	  strcpy(str, "./script.sh ");
+	  strcat(str, pos);
+	  system(str);
+	  free(str);
 	  if ((tm = strstr(pos, "PING")) != NULL)
 	    {
 	      tm = strstr(tm, ":") + 1;

@@ -1,11 +1,11 @@
 /*
 ** bot2.c for bot2 in /home/moran-_d/rendu/pathwar
-** 
+**
 ** Made by moran-_d
 ** Login   <moran-_d@epitech.net>
-** 
+**
 ** Started on  Mon Apr 27 10:01:37 2015 moran-_d
-** Last update Mon Apr 27 10:10:49 2015 moran-_d
+** Last update Tue Apr 28 09:36:50 2015 Even David
 */
 
 #include <stdarg.h>
@@ -27,28 +27,28 @@ void raw(char *fmt, ...) {
 }
 
 int main() {
-    
-  char *nick = "test";
+
+  char *nick = "zogzog";
   char *channel = "#pathwar-fr";
   char *host = "irc.epitech.net";
   char *port = "6667";
-    
+
   char *user, *command, *where, *message, *sep, *target;
   int i, j, l, sl, o = -1, start, wordcount;
   char buf[513];
   struct addrinfo hints, *res;
-    
+
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_INET;
   hints.ai_socktype = SOCK_STREAM;
   getaddrinfo(host, port, &hints, &res);
   conn = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
   connect(conn, res->ai_addr, res->ai_addrlen);
-    
+
   raw("USER %s 0 0 :%s\r\n", nick, nick);
   raw("NICK %s\r\n", nick);
   raw("JOIN %s\r\n", channel);
-    
+
   while ((sl = read(conn, sbuf, 512))) {
     for (i = 0; i < sl; i++) {
       o++;
@@ -57,9 +57,9 @@ int main() {
 	buf[o + 1] = '\0';
 	l = o;
 	o = -1;
-                
+
 	printf(">> %s", buf);
-                
+
 	if (!strncmp(buf, "PING", 4)) {
 	  buf[1] = 'O';
 	  raw(buf);
@@ -82,9 +82,9 @@ int main() {
 	      break;
 	    }
 	  }
-                    
+
 	  if (wordcount < 2) continue;
-                    
+
 	  if (!strncmp(command, "001", 3) && channel != NULL) {
 	    raw("JOIN %s\r\n", channel);
 	  } else if (!strncmp(command, "PRIVMSG", 7) || !strncmp(command, "NOTICE", 6)) {
@@ -95,12 +95,12 @@ int main() {
 	    raw("%s %s :%s", command, target, message); // If you enable this the IRCd will get its "*** Looking up your hostname..." messages thrown back at it but it works...
 	  }
 	}
-                
+
       }
     }
-        
+
   }
-    
+
   return 0;
-    
+
 }
